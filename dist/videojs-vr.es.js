@@ -28982,6 +28982,7 @@ class VR extends Plugin {
     this.handleVrDisplayDeactivate_ = videojs.bind(this, this.handleVrDisplayDeactivate_);
     this.handleResize_ = videojs.bind(this, this.handleResize_);
     this.animate_ = videojs.bind(this, this.animate_);
+    this.handleWheel_ = videojs.bind(this, this.handleWheel_);
     this.setProjection(this.options_.projection);
 
     // any time the video element is recycled for ads
@@ -29426,6 +29427,20 @@ void main() {
     this.camera.getWorldDirection(this.cameraVector);
     this.animationFrameId_ = this.requestAnimationFrame(this.animate_);
   }
+  handleWheel_(e) {
+    if (!this.camera) {
+      return;
+    }
+    e.preventDefault();
+
+    // Adjust FOV based on scroll direction
+    const zoomSpeed = 0.05;
+    this.camera.fov += e.deltaY * zoomSpeed;
+
+    // Clamp FOV to reasonable limits to prevent inversion or extreme distortion
+    this.camera.fov = Math.max(20, Math.min(120, this.camera.fov));
+    this.camera.updateProjectionMatrix();
+  }
   handleResize_() {
     const width = this.player_.currentWidth();
     const height = this.player_.currentHeight();
@@ -29435,7 +29450,7 @@ void main() {
   }
   setProjection(projection) {
     if (!getInternalProjectionName(projection)) {
-      videojs.log.error('videojs-vr: please pass a valid projection ' + validProjections.join(', '));
+      videojs.log.error('videojs-vr: please pass a valid projection ' + validProjections.join(','));
       return;
     }
     this.currentProjection_ = projection;
@@ -29511,6 +29526,9 @@ void main() {
     this.prevTimestamps_ = [];
     this.renderedCanvas = this.renderer.domElement;
     this.renderedCanvas.setAttribute('style', 'width: 100%; height: 100%; position: absolute; top:0;');
+    this.renderedCanvas.addEventListener('wheel', this.handleWheel_, {
+      passive: false
+    });
     const videoElStyle = this.getVideoEl_().style;
     this.player_.el().insertBefore(this.renderedCanvas, this.player_.el().firstChild);
     videoElStyle.zIndex = '-1';
@@ -29647,6 +29665,7 @@ void main() {
 
     // remove the old canvas
     if (this.renderedCanvas) {
+      this.renderedCanvas.removeEventListener('wheel', this.handleWheel_);
       this.renderedCanvas.parentNode.removeChild(this.renderedCanvas);
     }
     if (this.animationFrameId_) {
