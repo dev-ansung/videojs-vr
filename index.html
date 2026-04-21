@@ -1,24 +1,111 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
-  <title>videojs-vr Demo</title>
+  <title>VR Video Player</title>
+  <link href="https://cdn.jsdelivr.net/npm/video.js@8.23.7/dist/video-js.min.css" rel="stylesheet">
+  <link href="../dist/videojs-vr.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #eee;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .file-upload,
+    .projection-select {
+      cursor: pointer;
+      padding: 10px 15px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #eee;
+      font-size: 14px;
+      transition: background 0.2s, border-color 0.2s;
+      outline: none;
+    }
+
+    .file-upload:hover,
+    .projection-select:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #666;
+    }
+
+    #media-input {
+      display: none;
+    }
+
+    .video-js {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      max-width: 100%;
+    }
+  </style>
 </head>
+
 <body>
-  <iframe width="700" height="400" src="examples/360.html" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" allow="gyroscope; accelerometer; xr"></iframe>
-  <ul>
-    <li><a href="test/debug.html">Run unit tests in browser.</a></li>
-    <li><a href="examples/180.html">180 video example</a></li>
-    <li><a href="examples/180-mono.html">180 video example (monoscopic input)</a></li>
-    <li><a href="examples/360-cube.html">360 Cube Video example</a></li>
-    <li><a href="examples/360.html">360 Video example</a></li>
-    <li><a href="examples/360-two.html">Another 360 Video example</a></li>
-    <li><a href="examples/360-tb.html">360 TB Video example</a></li>
-    <li><a href="examples/eac.html">EAC video example</a></li>
-    <li><a href="examples/eac-lr.html">EAC LR video example</a></li>
-    <li><a href="examples/fluid.html">"Fluid" video size example</a></li>
-    <li><a href="examples/spatial.html">Spatial audio example</a></li>
-    <li><a href="examples/sphere-detail.html">360 with increased sphere detail example</a></li>
-  </ul>
+  <div class="controls-row">
+    <label class="file-upload">
+      Open VR Video
+      <input type="file" id="media-input" accept="video/*">
+    </label>
+
+    <select id="projection-type" class="projection-select">
+      <option value="auto">Auto-detect</option>
+      <option value="180">180° Sphere</option>
+      <option value="180_MONO">180° Monoscopic</option>
+      <option value="360">360° Sphere</option>
+      <option value="360_LR">360° Side-by-Side</option>
+      <option value="360_TB">360° Top-to-Bottom</option>
+      <option value="Cube">Standard Cube</option>
+      <option value="EAC">Equi-Angular (EAC)</option>
+      <option value="EAC_LR">EAC Side-by-Side</option>
+      <option value="NONE">None (2D)</option>
+    </select>
+  </div>
+
+  <video id="player" class="video-js vjs-big-play-centered" width="960" height="540" controls playsinline></video>
+
+  <script src="https://cdn.jsdelivr.net/npm/video.js@8.23.7/dist/video.min.js"></script>
+  <script src="./dist/videojs-vr.js"></script>
+  <script>
+    const player = videojs('player');
+    const projectionSelect = document.getElementById('projection-type');
+
+
+    // Handle projection changes
+    projectionSelect.addEventListener('change', function () {
+      player.vr({ projection: this.value });
+    });
+
+    // Handle file selection
+    document.getElementById('media-input').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        player.src({
+          src: url,
+          type: file.type || 'video/mp4'
+        });
+        player.play();
+      }
+    });
+  </script>
 </body>
+
 </html>
