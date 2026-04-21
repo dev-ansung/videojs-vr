@@ -1,4 +1,4 @@
-import { version as VERSION } from '../package.json';
+import {version as VERSION} from '../package.json';
 import window from 'global/window';
 import document from 'global/document';
 import WebVRPolyfill from 'webvr-polyfill/src/webvr-polyfill';
@@ -61,7 +61,7 @@ class VR extends Plugin {
     this.videojsErrorsSupport_ = !!videojs.errors;
 
     if (this.videojsErrorsSupport_) {
-      player.errors({ errors });
+      player.errors({errors});
     }
 
     // IE 11 does not support enough webgl to be supported
@@ -70,7 +70,7 @@ class VR extends Plugin {
       // if a player triggers error before 'loadstart' is fired
       // video.js will reset the error overlay
       this.player_.on('loadstart', () => {
-        this.triggerError_({ code: 'web-vr-not-supported', dismiss: false });
+        this.triggerError_({code: 'web-vr-not-supported', dismiss: false});
       });
       return;
     }
@@ -85,7 +85,6 @@ class VR extends Plugin {
     this.handleVrDisplayDeactivate_ = videojs.bind(this, this.handleVrDisplayDeactivate_);
     this.handleResize_ = videojs.bind(this, this.handleResize_);
     this.animate_ = videojs.bind(this, this.animate_);
-    this.handleWheel_ = videojs.bind(this, this.handleWheel_);
 
     this.setProjection(this.options_.projection);
 
@@ -114,7 +113,7 @@ class VR extends Plugin {
       projection = 'NONE';
     }
 
-    const position = { x: 0, y: 0, z: 0 };
+    const position = {x: 0, y: 0, z: 0 };
 
     if (this.scene) {
       this.scene.remove(this.movieScreen);
@@ -136,7 +135,7 @@ class VR extends Plugin {
       this.movieScreen.position.set(position.x, position.y, position.z);
 
       this.movieScreen.scale.x = -1;
-      this.movieScreen.quaternion.setFromAxisAngle({ x: 0, y: 1, z: 0 }, -Math.PI / 2);
+      this.movieScreen.quaternion.setFromAxisAngle({x: 0, y: 1, z: 0}, -Math.PI / 2);
       this.scene.add(this.movieScreen);
     } else if (projection === '360_LR' || projection === '360_TB') {
       // Left eye view
@@ -168,7 +167,7 @@ class VR extends Plugin {
 
       this.movieScreen = new THREE.Mesh(this.movieGeometry, this.movieMaterial);
       this.movieScreen.scale.x = -1;
-      this.movieScreen.quaternion.setFromAxisAngle({ x: 0, y: 1, z: 0 }, -Math.PI / 2);
+      this.movieScreen.quaternion.setFromAxisAngle({x: 0, y: 1, z: 0}, -Math.PI / 2);
       // display in left eye only
       this.movieScreen.layers.set(1);
       this.scene.add(this.movieScreen);
@@ -201,7 +200,7 @@ class VR extends Plugin {
 
       this.movieScreen = new THREE.Mesh(this.movieGeometry, this.movieMaterial);
       this.movieScreen.scale.x = -1;
-      this.movieScreen.quaternion.setFromAxisAngle({ x: 0, y: 1, z: 0 }, -Math.PI / 2);
+      this.movieScreen.quaternion.setFromAxisAngle({x: 0, y: 1, z: 0}, -Math.PI / 2);
       // display in right eye only
       this.movieScreen.layers.set(2);
       this.scene.add(this.movieScreen);
@@ -313,11 +312,11 @@ class VR extends Plugin {
         this.movieMaterial = new THREE.ShaderMaterial({
           overdraw: true, side: THREE.BackSide,
           uniforms: {
-            mapped: { value: this.videoTexture },
-            mapMatrix: { value: mapMatrix },
-            contCorrect: { value: contCorrect },
-            faceWH: { value: new THREE.Vector2(1 / 3, 1 / 2).applyMatrix3(scaleMatrix) },
-            vidWH: { value: new THREE.Vector2(this.videoTexture.image.videoWidth, this.videoTexture.image.videoHeight).applyMatrix3(scaleMatrix) }
+            mapped: {value: this.videoTexture},
+            mapMatrix: {value: mapMatrix},
+            contCorrect: {value: contCorrect},
+            faceWH: {value: new THREE.Vector2(1 / 3, 1 / 2).applyMatrix3(scaleMatrix)},
+            vidWH: {value: new THREE.Vector2(this.videoTexture.image.videoWidth, this.videoTexture.image.videoHeight).applyMatrix3(scaleMatrix)}
           },
           vertexShader: `
 varying vec2 vUv;
@@ -441,7 +440,7 @@ void main() {
     // if we have videojs-errors use it
     if (this.videojsErrorsSupport_) {
       this.player_.error(errorObj);
-      // if we don't have videojs-errors just use a normal player error
+    // if we don't have videojs-errors just use a normal player error
     } else {
       // strip any html content from the error message
       // as it is not supported outside of videojs-errors
@@ -472,7 +471,7 @@ void main() {
     if (!this.vrDisplay) {
       return;
     }
-    this.vrDisplay.requestPresent([{ source: this.renderedCanvas }]).then(() => {
+    this.vrDisplay.requestPresent([{source: this.renderedCanvas}]).then(() => {
       if (!this.vrDisplay.cardboardUI_ || !videojs.browser.IS_IOS) {
         return;
       }
@@ -595,22 +594,6 @@ void main() {
     this.animationFrameId_ = this.requestAnimationFrame(this.animate_);
   }
 
-  handleWheel_(e) {
-    if (!this.camera) {
-      return;
-    }
-
-    e.preventDefault();
-
-    // Adjust FOV based on scroll direction
-    const zoomSpeed = 0.05;
-    this.camera.fov += e.deltaY * zoomSpeed;
-
-    // Clamp FOV to reasonable limits to prevent inversion or extreme distortion
-    this.camera.fov = Math.max(20, Math.min(120, this.camera.fov));
-    this.camera.updateProjectionMatrix();
-  }
-
   handleResize_() {
     const width = this.player_.currentWidth();
     const height = this.player_.currentHeight();
@@ -620,12 +603,10 @@ void main() {
     this.camera.updateProjectionMatrix();
   }
 
-
-
   setProjection(projection) {
 
     if (!utils.getInternalProjectionName(projection)) {
-      videojs.log.error('videojs-vr: please pass a valid projection ' + utils.validProjections.join(','));
+      videojs.log.error('videojs-vr: please pass a valid projection ' + utils.validProjections.join(', '));
       return;
     }
 
@@ -669,8 +650,8 @@ void main() {
 
     // mobile devices, or cardboard forced to on
     if (this.options_.forceCardboard ||
-      videojs.browser.IS_ANDROID ||
-      videojs.browser.IS_IOS) {
+        videojs.browser.IS_ANDROID ||
+        videojs.browser.IS_IOS) {
       this.addCardboardButton_();
     }
 
@@ -697,7 +678,7 @@ void main() {
       } catch (e) {
         this.reset();
         this.player_.pause();
-        this.triggerError_({ code: 'web-vr-hls-cors-not-supported', dismiss: false });
+        this.triggerError_({code: 'web-vr-hls-cors-not-supported', dismiss: false});
         throw new Error(e);
       }
     };
@@ -713,7 +694,6 @@ void main() {
 
     this.renderedCanvas = this.renderer.domElement;
     this.renderedCanvas.setAttribute('style', 'width: 100%; height: 100%; position: absolute; top:0;');
-    this.renderedCanvas.addEventListener('wheel', this.handleWheel_, { passive: false });
 
     const videoElStyle = this.getVideoEl_().style;
 
@@ -762,9 +742,9 @@ void main() {
         this.animationFrameId_ = this.requestAnimationFrame(this.animate_);
       });
     } else if (window.navigator.getVRDevices) {
-      this.triggerError_({ code: 'web-vr-out-of-date', dismiss: false });
+      this.triggerError_({code: 'web-vr-out-of-date', dismiss: false});
     } else {
-      this.triggerError_({ code: 'web-vr-not-supported', dismiss: false });
+      this.triggerError_({code: 'web-vr-not-supported', dismiss: false});
     }
 
     if (this.options_.omnitone) {
@@ -868,7 +848,6 @@ void main() {
 
     // remove the old canvas
     if (this.renderedCanvas) {
-      this.renderedCanvas.removeEventListener('wheel', this.handleWheel_);
       this.renderedCanvas.parentNode.removeChild(this.renderedCanvas);
     }
 
