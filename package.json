@@ -10,8 +10,8 @@
     "dist": "bun run build",
     "dev": "vite",
     "serve": "vite preview",
-    "build:lib": "rollup -c rollup.config.mjs && sass --no-source-map src/plugin.scss dist/lib/videojs-vr.css",
-    "build:demo": "vite build && cp dist/lib/videojs-vr.js dist/demo/ && cp dist/lib/videojs-vr.css dist/demo/ && cp demo/index.css dist/demo/ && cp demo/static.html dist/demo/"
+    "build:lib": "rollup -c rollup.config.mjs && sass --no-source-map src/videojs-vr/plugin.scss dist/lib/videojs-vr.css",
+    "build:demo": "vite build && cp dist/lib/videojs-vr.js dist/demo/ && cp dist/lib/videojs-vr.css dist/demo/ && cp src/demo/index.css dist/demo/ && cp src/demo/static.html dist/demo/"
   },
   "dependencies": {
     "@babel/runtime": "^7.14.5",

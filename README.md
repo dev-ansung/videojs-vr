@@ -83,5 +83,11 @@ bun run dist
 bun run dev
 ```
 
+## Source Layout
+- `src/videojs-vr`: library source code and WebVR adapters.
+- `src/demo`: React + static demo source files.
+- `dist/lib`: built library artifacts.
+- `dist/demo`: built demo artifacts.
+
 ## License
 MIT.

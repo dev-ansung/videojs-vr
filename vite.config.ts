@@ -4,15 +4,15 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  root: './demo',
+  root: './src/demo',
   base: './',
   build: {
-    outDir: '../dist/demo',
+    outDir: '../../dist/demo',
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
-        index: resolve(__dirname, 'demo/index.html')
+        index: resolve(__dirname, 'src/demo/index.html')
       },
       output: {
         manualChunks(id) {

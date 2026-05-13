@@ -1,4 +1,4 @@
-import { version as VERSION } from '../package.json';
+import { version as VERSION } from '../../package.json';
 import window from 'global/window';
 import document from 'global/document';
 import WebVRPolyfill from 'webvr-polyfill/src/webvr-polyfill';

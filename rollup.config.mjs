@@ -10,7 +10,7 @@ const globals = {
 };
 
 export default {
-  input: 'src/plugin.js',
+  input: 'src/videojs-vr/plugin.js',
   output: [
     {
       file: 'dist/lib/videojs-vr.js',

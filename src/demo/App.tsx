@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import * as THREE from 'three';
-import VR from '../src/plugin.js';
-import '../src/plugin.scss';
+import VR from '../videojs-vr/plugin.js';
+import '../videojs-vr/plugin.scss';
 import './index.css';
 
 // Plugin Setup (Global shims required for Video.js legacy compatibility)
