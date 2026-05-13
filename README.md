@@ -1,8 +1,16 @@
 # videojs-vr
 
-Video.js plugin for 360° and VR video playback, powered by Three.js.
+A fork of [videojs/videojs-vr](https://github.com/videojs/videojs-vr) that works with **Video.js 8** and **current Three.js releases**.
+
+The upstream package has not been maintained since 2021. It breaks with Video.js 8 due to lifecycle API changes, and fails with modern Three.js due to removed and renamed APIs. This fork fixes both.
 
 ![videojs-vr animated preview](assets/videojs-vr-preview.gif)
+
+## What was fixed
+
+- **Video.js 8 compatibility** — updated plugin registration, player lifecycle hooks, and event handling to match the Video.js 8 API
+- **Three.js compatibility** — replaced removed and renamed Three.js APIs with current equivalents; Three.js is now a proper peer dependency instead of a vendored copy
+- **Build tooling** — modernized from legacy grunt/rollup setup to Vite + Rollup with ES module output
 
 ## Features
 
