@@ -40,10 +40,16 @@ class CardboardButton extends Button {
   }
 
   handleVrDisplayPresentChange_() {
-    if (!this.player_.vr().vrDisplay.isPresenting && this.active_) {
+    const vrPlugin = this.player_.vr();
+
+    if (!vrPlugin) {
+      return;
+    }
+
+    if (!vrPlugin.isPresenting() && this.active_) {
       this.handleVrDisplayDeactivate_();
     }
-    if (this.player_.vr().vrDisplay.isPresenting && !this.active_) {
+    if (vrPlugin.isPresenting() && !this.active_) {
       this.handleVrDisplayActivate_();
     }
   }
@@ -88,6 +94,12 @@ class CardboardButton extends Button {
   }
 
   handleClick(event) {
+    const vrPlugin = this.player_.vr();
+
+    if (!vrPlugin) {
+      return;
+    }
+
     // if cardboard mode display is not active, activate it
     // otherwise deactivate it
     if (!this.active_) {
@@ -97,9 +109,17 @@ class CardboardButton extends Button {
       if (!this.player_.hasStarted() && videojs.browser.IS_ANDROID) {
         this.player_.play();
       }
-      window.dispatchEvent(new window.Event('vrdisplayactivate'));
+      vrPlugin.enterVR().then((entered) => {
+        if (entered) {
+          this.handleVrDisplayActivate_();
+        }
+      });
     } else {
-      window.dispatchEvent(new window.Event('vrdisplaydeactivate'));
+      vrPlugin.exitVR().then((exited) => {
+        if (exited) {
+          this.handleVrDisplayDeactivate_();
+        }
+      });
     }
   }
 

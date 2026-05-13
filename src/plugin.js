@@ -466,7 +466,11 @@ void main() {
     if (!this.vrDisplay) {
       return;
     }
-    this.vrDisplay.requestPresent([{ source: this.renderedCanvas }]).then(() => {
+    this.enterVR().then((entered) => {
+      if (!entered) {
+        return;
+      }
+
       if (!this.vrDisplay.cardboardUI_ || !videojs.browser.IS_IOS) {
         return;
       }
@@ -513,14 +517,34 @@ void main() {
   }
 
   handleVrDisplayDeactivate_() {
-    if (!this.vrDisplay || !this.vrDisplay.isPresenting) {
+    if (!this.isPresenting()) {
       return;
     }
     if (this.iosRevertTouchToClick_) {
       this.iosRevertTouchToClick_();
     }
-    this.vrDisplay.exitPresent();
+    this.exitVR();
 
+  }
+
+  isPresenting() {
+    return !!(this.vrDisplay && this.vrDisplay.isPresenting);
+  }
+
+  enterVR() {
+    if (!this.vrDisplay) {
+      return Promise.resolve(false);
+    }
+
+    return this.vrDisplay.requestPresent([{ source: this.renderedCanvas }]).then(() => true, () => false);
+  }
+
+  exitVR() {
+    if (!this.vrDisplay || !this.vrDisplay.isPresenting) {
+      return Promise.resolve(false);
+    }
+
+    return this.vrDisplay.exitPresent().then(() => true, () => false);
   }
 
   requestAnimationFrame(fn) {
