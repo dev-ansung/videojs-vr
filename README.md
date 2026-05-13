@@ -43,7 +43,7 @@ player.vr({ projection: '360' });
 
 ```html
 <link rel="stylesheet" href="https://unpkg.com/video.js/dist/video-js.css">
-<link rel="stylesheet" href="dist/lib/videojs-vr.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dev-ansung/videojs-vr@main/dist/lib/videojs-vr.css">
 
 <video id="player" class="video-js vjs-default-skin" controls>
   <source src="your-360-video.mp4" type="video/mp4">
@@ -51,7 +51,7 @@ player.vr({ projection: '360' });
 
 <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
 <script src="https://unpkg.com/three/build/three.min.js"></script>
-<script src="dist/lib/videojs-vr.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/dev-ansung/videojs-vr@main/dist/lib/videojs-vr.js"></script>
 
 <script>
   var player = videojs('player');
