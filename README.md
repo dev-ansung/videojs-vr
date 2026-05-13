@@ -1,5 +1,11 @@
 # videojs-vr
 
+[![Deploy to GitHub Pages](https://github.com/dev-ansung/videojs-vr/actions/workflows/deploy.yml/badge.svg)](https://github.com/dev-ansung/videojs-vr/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![jsDelivr hits](https://data.jsdelivr.com/v1/package/gh/dev-ansung/videojs-vr/badge)](https://www.jsdelivr.com/package/gh/dev-ansung/videojs-vr)
+[![Video.js](https://img.shields.io/badge/Video.js-7%20%7C%208-blue.svg)](https://videojs.com)
+[![Three.js](https://img.shields.io/badge/Three.js-peer_dep-lightgrey.svg)](https://threejs.org)
+
 A fork of [videojs/videojs-vr](https://github.com/videojs/videojs-vr) that works with **Video.js 8** and **current Three.js releases**.
 
 The upstream package has not been maintained since 2021. It breaks with Video.js 8 due to lifecycle API changes, and fails with modern Three.js due to removed and renamed APIs. This fork fixes both.
