@@ -1,59 +1,51 @@
 # videojs-vr
 
-Video.js plugin for 360° and VR playback with Three.js.
+Video.js plugin for 360° and VR video playback, powered by Three.js.
 
-> Modernization note: this repository was updated to replace vendored Three.js
-> copies with dependency-based modules. Library source lives in `src/videojs-vr`,
-> demo source lives in `src/demo`, and build outputs are split across `dist/lib`
-> and `dist/demo`.
+![videojs-vr animated preview](assets/videojs-vr-preview.gif)
 
-## Overview
+## Features
 
-This plugin adds 360° equirectangular, stereoscopic 360° (left-right and top-bottom),
-180°, cube map, and VR playback support to Video.js.
-
-The runtime uses legacy WebVR APIs (`navigator.getVRDisplays`, `requestPresent`, and
-`vrdisplay*` events) together with `webvr-polyfill`. It is compatible with modern
-Video.js releases, but it does not use native WebXR.
+- 360° equirectangular (monoscopic and stereoscopic)
+- 180° video (left-right and mono)
+- Cube map and EAC projections
+- Cardboard / WebVR headset support via `webvr-polyfill`
+- Optional Omnitone ambisonic audio
+- Mouse, touch, and device-orientation camera controls
 
 ## Install
 
 ```bash
-npm install videojs-vr video.js
+bun add videojs-vr
 # or
-bun add videojs-vr video.js
+npm install videojs-vr
 ```
 
-If you use the script-tag bundle, include Three.js separately.
+> **Peer dependencies:** `video.js` `^7 || ^8` and `three` `^0.125` must be installed separately.
 
 ## Quick Start
 
-### Bundlers
-
-The package registers the `vr` plugin when imported.
+### Bundler
 
 ```javascript
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
-import VR from 'videojs-vr';
 import 'videojs-vr/dist/lib/videojs-vr.css';
+import VR from 'videojs-vr';
 
-const player = videojs('my-player', {
-  controls: true,
-  fluid: true
-});
+const player = videojs('my-player', { controls: true, fluid: true });
 
 player.mediainfo = { projection: '360' };
 player.vr({ projection: '360' });
 ```
 
-### Script Tag
+### Script tag
 
 ```html
-<link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
-<link href="dist/lib/videojs-vr.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/video.js/dist/video-js.css">
+<link rel="stylesheet" href="dist/lib/videojs-vr.css">
 
-<video id="video-player" class="video-js vjs-default-skin" controls>
+<video id="player" class="video-js vjs-default-skin" controls>
   <source src="your-360-video.mp4" type="video/mp4">
 </video>
 
@@ -62,11 +54,9 @@ player.vr({ projection: '360' });
 <script src="dist/lib/videojs-vr.js"></script>
 
 <script>
-  (function (window, videojs) {
-    var player = window.player = videojs('video-player');
-    player.mediainfo = { projection: '360' };
-    player.vr({ projection: '360', debug: false });
-  }(window, window.videojs));
+  var player = videojs('player');
+  player.mediainfo = { projection: '360' };
+  player.vr({ projection: '360' });
 </script>
 ```
 
@@ -74,51 +64,70 @@ player.vr({ projection: '360' });
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `projection` | string | `AUTO` | Default projection. Supported values include `360`, `360_LR`, `360_TB`, `360_CUBE`, `180`, `180_LR`, `180_MONO`, `EAC`, `EAC_LR`, `NONE`, and `AUTO`. |
-| `debug` | boolean | `false` | Enable plugin logging. |
-| `forceCardboard` | boolean | `false` | Force the cardboard control to appear. |
+| `projection` | string | `'AUTO'` | Projection mode. See [Projections](#projections) for valid values. |
+| `debug` | boolean | `false` | Enable verbose plugin logging to the console. |
+| `forceCardboard` | boolean | `false` | Always show the cardboard/VR button, even on non-mobile devices. |
 | `omnitone` | boolean | `false` | Enable Omnitone ambisonic audio support. |
-| `omnitoneOptions` | object | `{}` | Options passed to the Omnitone controller. |
-| `sphereDetail` | number | `32` | Sphere tessellation detail for 360° rendering. |
-| `disableTogglePlay` | boolean | `false` | Disable click/tap toggling between play and pause. |
+| `omnitoneOptions` | object | `{}` | Options forwarded to the Omnitone controller. |
+| `sphereDetail` | number | `32` | Tessellation level of the sphere mesh used for 360° rendering. |
+| `disableTogglePlay` | boolean | `false` | Prevent click/tap from toggling play/pause (useful for VR mode). |
 
-## Build And Demo
+## Projections
+
+Pass one of these strings to the `projection` option or set it via `player.mediainfo.projection`:
+
+| Value | Description |
+| --- | --- |
+| `360` | Equirectangular monoscopic |
+| `360_LR` | Equirectangular stereoscopic, left-right split |
+| `360_TB` | Equirectangular stereoscopic, top-bottom split |
+| `360_CUBE` | Cube map |
+| `180` | 180° equirectangular |
+| `180_LR` | 180° stereoscopic, left-right split |
+| `180_MONO` | 180° monoscopic |
+| `EAC` | Equi-Angular Cubemap |
+| `EAC_LR` | Equi-Angular Cubemap stereoscopic |
+| `NONE` | Disable the plugin for this source |
+| `AUTO` | Detect from `player.mediainfo.projection` at play time |
+
+## Development
 
 ```bash
-# Build library + demo outputs
-bun run build
+# Install dependencies
+bun install
 
-# Build the library only
-bun run build:lib
-
-# Build the demo only
-bun run build:demo
-
-# Start the demo dev server
+# Start the Vite dev server with the React demo
 bun run dev
 
-# Preview the built demo output
+# Build library + demo
+bun run build
+
+# Build only the library (dist/lib)
+bun run build:lib
+
+# Build only the demo (dist/demo)
+bun run build:demo
+
+# Preview the built demo
 bun run serve
 ```
 
-Build output is written to:
-
-- `dist/lib` for library bundles and styles
-- `dist/demo` for the React and static demo outputs
-
 ## Repository Layout
 
-- `src/videojs-vr` - library source code and WebVR adapters
-- `src/demo` - React demo and static demo source files
-- `dist/lib` - built library artifacts
-- `dist/demo` - built demo artifacts
+```
+src/
+  videojs-vr/   # Plugin source (JS, SCSS, WebVR adapters)
+  demo/         # React demo and static HTML demo
+dist/
+  lib/          # Built library — videojs-vr.js, videojs-vr.es.js, videojs-vr.css
+  demo/         # Built demo assets
+```
 
 ## Notes
 
-- The codebase was modernized by replacing legacy vendored Three.js usage.
-- Immersive mode remains WebVR-based for compatibility; native WebXR is not used.
-- Demo source and build output are intentionally separated to keep the library tree clean.
+- This plugin uses legacy WebVR APIs (`navigator.getVRDisplays`, `requestPresent`) polyfilled by `webvr-polyfill`. Native WebXR is not currently supported.
+- Three.js is a peer dependency and must be loaded separately when using the script-tag bundle.
 
 ## License
 
-MIT.
+MIT
