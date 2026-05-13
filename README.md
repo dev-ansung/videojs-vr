@@ -6,7 +6,7 @@ A professional [Video.js](http://videojs.com/) plugin that adds 360° and VR vid
 - Support for **360° equirectangular** videos.
 - Support for **360° 3D** (Stereoscopic) videos (Left-Right and Top-Bottom).
 - Support for **180°** and **Cube map** projections.
-- VR mode support via **WebXR** (with legacy WebVR polyfill).
+- VR mode support via **legacy WebVR APIs** (with `webvr-polyfill`).
 - Integrated **Orbit Controls** for desktop and **Orientation Controls** for mobile.
 
 ## Installation
@@ -21,6 +21,9 @@ bun add videojs-vr
 
 ### Standard `<script>` tag
 Include Video.js, Three.js, and the plugin. The plugin will automatically register itself.
+
+Note: immersive mode in this codebase is currently driven by legacy WebVR APIs
+(`navigator.getVRDisplays`, `requestPresent`, `vrdisplay*` events), not native WebXR.
 
 ```html
 <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
@@ -82,6 +85,10 @@ bun run dist
 # Start dev server
 bun run dev
 ```
+
+After building, `dist/demo` includes both demo entry points:
+- `dist/demo/index.html` (React demo)
+- `dist/demo/static.html` (plain static demo)
 
 ## Source Layout
 - `src/videojs-vr`: library source code and WebVR adapters.
