@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>videojs-vr - Static Demo</title>
+  
+  <!-- Shared Styles (Exactly the same as React Demo) -->
+  <link href="https://unpkg.com/video.js@8/dist/video-js.css" rel="stylesheet">
+  <link href="./videojs-vr.css" rel="stylesheet">
+  <link href="./index.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="demo-container">
+    <h1>videojs-vr</h1>
+    <p style="color: #94a3b8; margin-top: -1.5rem; margin-bottom: 2rem;">Static HTML Demo</p>
+
+    <div class="player-card">
+      <video id="video-player" class="video-js vjs-big-play-centered" playsinline></video>
+    </div>
+
+    <div class="controls">
+      <input type="file" id="file-input" accept="video/*" style="display: none;">
+      <button class="btn-primary" onclick="document.getElementById('file-input').click()">
+        Open 360° Video
+      </button>
+      <div id="status" class="status">Ready</div>
+    </div>
+  </div>
+
+  <!-- JS Dependencies -->
+  <script src="https://unpkg.com/video.js@8/dist/video.min.js"></script>
+  <script src="https://unpkg.com/three@0.125.2/build/three.min.js"></script>
+  <script src="./videojs-vr.js"></script>
+
+  <script>
+    (function(window, videojs) {
+      // Setup
+      var player = videojs('video-player', {
+        controls: true,
+        fluid: true,
+        playbackRates: [0.5, 1, 1.5, 2]
+      });
+
+      player.ready(function() {
+        player.mediainfo = { projection: '360' };
+        player.vr({ projection: '360', debug: false });
+      });
+
+      // File Handling
+      document.getElementById('file-input').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+
+        var url = URL.createObjectURL(file);
+        player.src({ src: url, type: file.type || 'video/mp4' });
+        player.play();
+        document.getElementById('status').innerText = 'Playing: ' + file.name;
+      });
+    }(window, window.videojs));
+  </script>
+</body>
+</html>
