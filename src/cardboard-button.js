@@ -7,10 +7,10 @@ class CardboardButton extends Button {
   constructor(player, options) {
     super(player, options);
 
-    this.handleVrDisplayActivate_ = videojs.bind(this, this.handleVrDisplayActivate_);
-    this.handleVrDisplayDeactivate_ = videojs.bind(this, this.handleVrDisplayDeactivate_);
-    this.handleVrDisplayPresentChange_ = videojs.bind(this, this.handleVrDisplayPresentChange_);
-    this.handleOrientationChange_ = videojs.bind(this, this.handleOrientationChange_);
+    this.handleVrDisplayActivate_ = this.handleVrDisplayActivate_.bind(this);
+    this.handleVrDisplayDeactivate_ = this.handleVrDisplayDeactivate_.bind(this);
+    this.handleVrDisplayPresentChange_ = this.handleVrDisplayPresentChange_.bind(this);
+    this.handleOrientationChange_ = this.handleOrientationChange_.bind(this);
     window.addEventListener('orientationchange', this.handleOrientationChange_);
     window.addEventListener('vrdisplayactivate', this.handleVrDisplayActivate_);
     window.addEventListener('vrdisplaydeactivate', this.handleVrDisplayDeactivate_);
@@ -105,6 +105,7 @@ class CardboardButton extends Button {
 
   dispose() {
     super.dispose();
+    window.removeEventListener('orientationchange', this.handleOrientationChange_);
     window.removeEventListener('vrdisplayactivate', this.handleVrDisplayActivate_);
     window.removeEventListener('vrdisplaydeactivate', this.handleVrDisplayDeactivate_);
     window.removeEventListener('vrdisplaypresentchange', this.handleVrDisplayPresentChange_);

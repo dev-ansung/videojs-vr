@@ -61,7 +61,8 @@ const VREffect = function ( renderer, onError ) {
 
 	var scope = this;
 
-	var rendererSize = renderer.getSize();
+	var rendererSize = new THREE.Vector2();
+	renderer.getSize( rendererSize );
 	var rendererUpdateStyle = false;
 	var rendererPixelRatio = renderer.getPixelRatio();
 
@@ -124,7 +125,8 @@ const VREffect = function ( renderer, onError ) {
 			if ( ! wasPresenting ) {
 
 				rendererPixelRatio = renderer.getPixelRatio();
-				rendererSize = renderer.getSize();
+				rendererSize = new THREE.Vector2();
+				renderer.getSize( rendererSize );
 
 				renderer.setPixelRatio( 1 );
 				renderer.setSize( eyeWidth * 2, eyeHeight, false );
@@ -256,7 +258,8 @@ const VREffect = function ( renderer, onError ) {
 
 			// When rendering we don't care what the recommended size is, only what the actual size
 			// of the backbuffer is.
-			var size = renderer.getSize();
+			var size = new THREE.Vector2();
+			renderer.getSize( size );
 			var layers = vrDisplay.getLayers();
 			var leftBounds;
 			var rightBounds;
@@ -457,8 +460,8 @@ const VREffect = function ( renderer, onError ) {
 
 		// The eye's model matrix in head space is the inverse of headToEyeMatrix we calculated above.
 
-		eyeMatrixL.getInverse( eyeMatrixL );
-		eyeMatrixR.getInverse( eyeMatrixR );
+		eyeMatrixL.invert();
+		eyeMatrixR.invert();
 
 	}
 

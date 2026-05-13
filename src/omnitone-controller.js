@@ -35,7 +35,7 @@ class OmnitoneController extends videojs.EventTarget {
       this.initialized = true;
       this.trigger({type: 'omnitone-ready'});
     }, (error) => {
-      videojs.log.warn(`videojs-vr: Omnitone initializes failed with the following error: ${error})`);
+      videojs.log.warn(`videojs-vr: Omnitone initializes failed with the following error: ${error}`);
     });
   }
 
@@ -56,8 +56,23 @@ class OmnitoneController extends videojs.EventTarget {
    */
   dispose() {
     this.initialized = false;
-    this.foaRenderer.setRenderingMode('bypass');
-    this.foaRenderer = null;
+
+    if (this.foaRenderer) {
+      this.foaRenderer.setRenderingMode('bypass');
+
+      if (this.foaRenderer.output) {
+        this.foaRenderer.output.disconnect();
+      }
+      if (this.foaRenderer.input) {
+        this.foaRenderer.input.disconnect();
+      }
+      this.foaRenderer = null;
+    }
+
+    if (this.videoElementSource) {
+      this.videoElementSource.disconnect();
+      this.videoElementSource = null;
+    }
   }
 }
 
