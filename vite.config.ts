@@ -7,8 +7,8 @@ export default defineConfig({
   root: './demo',
   base: './',
   build: {
-    outDir: '../dist',
-    emptyOutDir: false,
+    outDir: '../dist/demo',
+    emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {

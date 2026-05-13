@@ -2,15 +2,16 @@
   "name": "videojs-vr",
   "version": "2.0.0",
   "description": "A plugin to add 360 and VR video support to video.js.",
-  "main": "dist/videojs-vr.js",
-  "module": "dist/videojs-vr.es.js",
+  "main": "dist/lib/videojs-vr.js",
+  "module": "dist/lib/videojs-vr.es.js",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c rollup.config.mjs && sass --no-source-map src/plugin.scss dist/videojs-vr.css && cp dist/videojs-vr.js demo/ && cp dist/videojs-vr.css demo/ && cp demo/index.css dist/ && cp demo/static.html dist/ && vite build",
+    "build": "bun run build:lib && bun run build:demo",
     "dist": "bun run build",
     "dev": "vite",
     "serve": "vite preview",
-    "build:lib": "rollup -c rollup.config.mjs"
+    "build:lib": "rollup -c rollup.config.mjs && sass --no-source-map src/plugin.scss dist/lib/videojs-vr.css",
+    "build:demo": "vite build && cp dist/lib/videojs-vr.js dist/demo/ && cp dist/lib/videojs-vr.css dist/demo/ && cp demo/index.css dist/demo/ && cp demo/static.html dist/demo/"
   },
   "dependencies": {
     "@babel/runtime": "^7.14.5",

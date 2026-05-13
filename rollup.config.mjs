@@ -13,13 +13,13 @@ export default {
   input: 'src/plugin.js',
   output: [
     {
-      file: 'dist/videojs-vr.js',
+      file: 'dist/lib/videojs-vr.js',
       format: 'umd',
       name: 'videojs-vr',
       globals
     },
     {
-      file: 'dist/videojs-vr.es.js',
+      file: 'dist/lib/videojs-vr.es.js',
       format: 'es',
       globals
     }

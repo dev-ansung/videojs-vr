@@ -24,7 +24,7 @@ Include Video.js, Three.js, and the plugin. The plugin will automatically regist
 
 ```html
 <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
-<link href="dist/videojs-vr.css" rel="stylesheet">
+<link href="dist/lib/videojs-vr.css" rel="stylesheet">
 
 <video id="video-player" class="video-js vjs-default-skin" controls>
   <source src="your-360-video.mp4" type="video/mp4">
@@ -32,7 +32,7 @@ Include Video.js, Three.js, and the plugin. The plugin will automatically regist
 
 <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
 <script src="https://unpkg.com/three/build/three.min.js"></script>
-<script src="dist/videojs-vr.js"></script>
+<script src="dist/lib/videojs-vr.js"></script>
 
 <script>
   (function(window, videojs) {
@@ -49,7 +49,7 @@ import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import * as THREE from 'three';
 import VR from 'videojs-vr';
-import 'videojs-vr/dist/videojs-vr.css';
+import 'videojs-vr/dist/lib/videojs-vr.css';
 
 // Plugin requires THREE and videojs to be available globally for certain internals
 window.THREE = THREE;
@@ -74,6 +74,10 @@ player.vr({ projection: '360' });
 ```bash
 # Build the library and demo
 bun run dist
+
+# Outputs:
+# - dist/lib  (library bundles)
+# - dist/demo (demo build artifacts)
 
 # Start dev server
 bun run dev
